@@ -1,15 +1,7 @@
 import { ShoppingCart } from "@mui/icons-material";
-import {
-    AppBar,
-    Badge,
-    Box,
-    IconButton,
-    List,
-    ListItem,
-    Toolbar,
-    Typography,
-} from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { AppBar, Badge, Box, IconButton, List, ListItem, Toolbar, Typography } from "@mui/material";
+import { Link, NavLink } from "react-router-dom";
+import { useStoreContext } from "../context/StoreContext";
 
 const midLinks = [
     { title: "catalog", path: "/catalog" },
@@ -35,6 +27,8 @@ const navStyles = {
 };
 
 export default function Header() {
+    const { basket } = useStoreContext();
+    const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
     return (
         <AppBar position="static" sx={{ mb: 4 }}>
             <Toolbar
@@ -45,42 +39,27 @@ export default function Header() {
                 }}
             >
                 <Box>
-                    <Typography
-                        variant="h6"
-                        component={NavLink}
-                        to="/"
-                        sx={navStyles}
-                    >
+                    <Typography variant="h6" component={NavLink} to="/" sx={navStyles}>
                         RE-STORE
                     </Typography>
                 </Box>
 
                 <List sx={{ display: "flex" }}>
                     {midLinks.map(({ title, path }) => (
-                        <ListItem
-                            component={NavLink}
-                            to={path}
-                            key={path}
-                            sx={navStyles}
-                        >
+                        <ListItem component={NavLink} to={path} key={path} sx={navStyles}>
                             {title.toUpperCase()}
                         </ListItem>
                     ))}
                 </List>
                 <Box display="flex" align-items="center">
-                    <IconButton size="large" sx={navStyles}>
-                        <Badge badgeContent={4} color="secondary">
+                    <IconButton component={Link} to="/basket" size="large" sx={navStyles}>
+                        <Badge badgeContent={itemCount} color="secondary">
                             <ShoppingCart />
                         </Badge>
                     </IconButton>
                     <List sx={{ display: "flex" }}>
                         {rightLinks.map(({ title, path }) => (
-                            <ListItem
-                                component={NavLink}
-                                to={path}
-                                key={path}
-                                sx={navStyles}
-                            >
+                            <ListItem component={NavLink} to={path} key={path} sx={navStyles}>
                                 {title.toUpperCase()}
                             </ListItem>
                         ))}
